@@ -1,7 +1,10 @@
 import NextAuth, { NextAuthOptions } from "next-auth";
 import KakaoProvider from "next-auth/providers/kakao";
 import GoogleProvider from "next-auth/providers/google";
+import { PrismaAdapter } from "@next-auth/prisma-adapter";
+import { prisma } from "@/lib/prisma";
 export const authOption: NextAuthOptions = {
+  adapter: PrismaAdapter(prisma),
   providers: [
     KakaoProvider({
       clientId: process.env.KAKAO_CLIENT_ID!,
