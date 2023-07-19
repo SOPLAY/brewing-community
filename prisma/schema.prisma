@@ -31,25 +31,26 @@ model Account {
   @@unique([provider, providerAccountId])
 }
 
-model Session {
-  id           String   @id @default(cuid())
-  sessionToken String   @unique
-  userId       String
-  expires      DateTime
-  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-}
+// 로그인 세션을 DB에 따로 저장하지 않고 jwt로 관리
+// model Session {
+//   id           String   @id @default(cuid())
+//   sessionToken String   @unique
+//   userId       String
+//   expires      DateTime
+//   user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+// }
 
 model User {
   id            String    @id @default(cuid())
   name          String?
   bio           String?   @db.Text
   age           Int?
-  email         String?   @unique
+  email         String    @unique
   emailVerified DateTime?
   image         String?
   password      String?
   accounts      Account[]
-  sessions      Session[]
+  // sessions      Session[]
 }
 
 model VerificationToken {
