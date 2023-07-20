@@ -3,6 +3,8 @@
 import {
   Children,
   cloneElement,
+  ForwardedRef,
+  forwardRef,
   HTMLAttributes,
   InputHTMLAttributes,
   ReactElement,
@@ -45,16 +47,29 @@ export function Input({ label, children, errorText, ...props }: InputProps) {
 
 interface TextFieldProps extends InputHTMLAttributes<HTMLInputElement> {
   error?: boolean;
+  onEnter?: () => void;
 }
 
-Input.TextField = ({ error, ...props }: TextFieldProps) => {
-  return (
-    <input
-      className={`duration-300 py-2 px-4 w-full rounded-md border border-gray-700/20 bg-gray-700/5 ${
-        error &&
-        "!text-red-500 border-red-500 bg-red-500/20 placeholder:text-red-500/50"
-      }`}
-      {...props}
-    />
-  );
-};
+Input.TextField = forwardRef(
+  (
+    { error, onEnter = () => {}, ...props }: TextFieldProps,
+    ref: ForwardedRef<HTMLInputElement>
+  ) => {
+    return (
+      <input
+        className={`duration-300 py-2 px-4 w-full rounded-md border border-gray-700/20 bg-gray-700/5 ${
+          error &&
+          "!text-red-500 border-red-500 bg-red-500/20 placeholder:text-red-500/50"
+        }`}
+        onKeyDown={(e) => {
+          if (e.code === "Enter") {
+            e.preventDefault();
+            onEnter();
+          }
+        }}
+        ref={ref}
+        {...props}
+      />
+    );
+  }
+);

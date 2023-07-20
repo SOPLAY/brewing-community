@@ -16,7 +16,8 @@ export function Button({
       className={`
         py-2 px-4 w-full border rounded-md
         flex items-center justify-center
-        duration-300   
+        duration-300 
+        [&+&]:mt-5
         ${sizes[size]} 
         ${variant && variants[variant]} 
         ${color && color}

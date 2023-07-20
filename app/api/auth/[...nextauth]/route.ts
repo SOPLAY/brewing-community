@@ -5,6 +5,7 @@ import { PrismaAdapter } from "@next-auth/prisma-adapter";
 import CredentialsProvider from "next-auth/providers/credentials";
 import { prisma } from "@/lib/prisma";
 import { checkHash } from "@/lib/bcrypt";
+
 export const authOption: NextAuthOptions = {
   adapter: PrismaAdapter(prisma),
   session: {
@@ -47,6 +48,9 @@ export const authOption: NextAuthOptions = {
       },
     }),
   ],
+  pages: {
+    signIn: "/auth/signin",
+  },
 };
 const handler = NextAuth(authOption);
 
