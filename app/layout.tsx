@@ -1,7 +1,8 @@
 import "./globals.css";
 import type { Metadata } from "next";
-import { Inter, Roboto } from "next/font/google";
+import { Inter } from "next/font/google";
 import AuthProvider from "@/app/AuthProvider";
+import ToastContainer from "@/components/ToastContainer";
 
 const inter = Inter({ subsets: ["latin"] });
 // const roboto = Roboto({ subsets: ['latin'] })
@@ -22,6 +23,7 @@ export default function RootLayout({
         <AuthProvider>
           <BaseLayout>{children}</BaseLayout>
         </AuthProvider>
+        <ToastContainer />
       </body>
     </html>
   );
