@@ -1,5 +1,3 @@
-"use client";
-
 import { useState } from "react";
 
 let idCnt = 0;
