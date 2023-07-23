@@ -14,7 +14,7 @@ type Props = {
 
 export default function Layout({ children }: Props) {
   return (
-    <div className="bg-base flex min-h-screen absolute left-0 top-0 w-full">
+    <div className="bg-base flex min-h-screen absolute left-0 top-0 w-full z-[100]">
       <div className="lg:min-w-[500px] relative flex items-center justify-center w-full ">
         <h2 className="absolute top-6 left-6">
           <Logo />
@@ -22,7 +22,12 @@ export default function Layout({ children }: Props) {
         <div className="max-w-[384px] w-full my-16 ">{children}</div>
       </div>
       <div className="lg:block hidden">
-        <Image src={SingBgImg} alt={"sdf"} className={"h-full object-cover"} />
+        <Image
+          src={SingBgImg}
+          alt={"sdf"}
+          className={"h-full object-cover"}
+          placeholder="blur"
+        />
       </div>
     </div>
   );
