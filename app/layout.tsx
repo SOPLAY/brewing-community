@@ -3,6 +3,8 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import AuthProvider from "@/app/AuthProvider";
 import ToastContainer from "@/components/ToastContainer";
+import Header from "@/app/Header";
+import Footer from "@/app/Footer";
 
 const inter = Inter({ subsets: ["latin"] });
 // const roboto = Roboto({ subsets: ['latin'] })
@@ -21,14 +23,12 @@ export default function RootLayout({
     <html lang="ko">
       <body className={inter.className}>
         <AuthProvider>
-          <BaseLayout>{children}</BaseLayout>
+          <Header />
+          <main className="pt-[60px] main-container">{children}</main>
+          <Footer />
         </AuthProvider>
         <ToastContainer />
       </body>
     </html>
   );
-}
-
-function BaseLayout({ children }: { children: React.ReactNode }) {
-  return <>{children}</>;
 }
