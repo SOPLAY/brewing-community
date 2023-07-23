@@ -17,13 +17,13 @@ model Account {
   type                     String
   provider                 String
   providerAccountId        String
-  refresh_token            String? @db.Text
-  access_token             String? @db.Text
+  refresh_token            String?
+  access_token             String?
   expires_at               Int?
   refresh_token_expires_in Int?
   token_type               String?
   scope                    String?
-  id_token                 String? @db.Text
+  id_token                 String?
   session_state            String?
 
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
@@ -43,14 +43,15 @@ model Account {
 model User {
   id            String    @id @default(cuid())
   name          String?
-  bio           String?   @db.Text
+  bio           String?
   age           Int?
   email         String    @unique
   emailVerified DateTime?
   image         String?
   password      String?
   accounts      Account[]
-  // sessions      Session[]
+  Post          Post[]
+  Comment       Comment[]
 }
 
 model VerificationToken {
@@ -59,4 +60,34 @@ model VerificationToken {
   expires    DateTime
 
   @@unique([identifier, token])
+}
+
+model Post {
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  published Boolean  @default(true)
+
+  category  String
+  title     String
+  content   String
+  authorId  String
+  comments  Comment[]
+  imageList String[]
+
+  author User @relation(fields: [authorId], references: [id], onDelete: Cascade)
+}
+
+model Comment {
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  published Boolean  @default(true)
+
+  content  String
+  postId   String
+  authorId String
+
+  author User @relation(fields: [authorId], references: [id])
+  Post   Post @relation(fields: [postId], references: [id], onDelete: Cascade)
 }
