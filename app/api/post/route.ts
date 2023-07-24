@@ -24,7 +24,12 @@ export async function GET(request: Request) {
       category: category === "all" ? undefined : category,
       published: true,
     },
-    include: {
+    select: {
+      id: true,
+      createdAt: true,
+      title: true,
+      category: true,
+      views: true,
       author: {
         select: {
           email: true,
@@ -83,7 +88,7 @@ export async function POST(request: Request) {
   );
 }
 
-export async function PUT(request: Response) {
+export async function PUT(request: Request) {
   const session = await getServerSession(authOption);
   const body = await request.json();
   const {
