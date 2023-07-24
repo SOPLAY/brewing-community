@@ -67,6 +67,7 @@ model Post {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   published Boolean  @default(true)
+  views     Int      @default(0)
 
   category  String
   title     String
@@ -75,7 +76,7 @@ model Post {
   comments  Comment[]
   imageList String[]
 
-  author User @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  author User @relation(fields: [authorId], references: [id], onDelete: Cascade, onUpdate: Cascade)
 }
 
 model Comment {
