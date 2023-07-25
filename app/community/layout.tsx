@@ -9,5 +9,5 @@ export const metadata: Metadata = {
   description: "커뮤니티 게시판 입니다.",
 };
 export default function Layout({ children }: Props) {
-  return <>{children}</>;
+  return <div className="px-[10px]">{children}</div>;
 }

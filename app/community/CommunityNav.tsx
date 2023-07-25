@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { motion } from "framer-motion";
+import { HiOutlinePencilAlt } from "react-icons/hi";
 
 const tabs = [
   {
@@ -19,10 +20,10 @@ const tabs = [
   },
 ];
 export default function CommunityNav() {
-  const seletedTab = useSearchParams().get("category") || "all";
+  const selectedTab = useSearchParams().get("category") || "all";
   return (
     <>
-      <nav className="mb-[2px]">
+      <nav className="mb-[2px] flex justify-between font-semibold">
         <ul className="flex h-[30px] mt-2 overflow-auto">
           {tabs.map((tab) => (
             <li key={`tabs_${tab.category}`}>
@@ -33,12 +34,11 @@ export default function CommunityNav() {
                   w-28 h-full
                   rounded-t-md
                   delay-150 duration-100 ease-in-out 
-                  font-semibold
-                  ${tab.category === seletedTab && "bg-gray-700/10"}
+                  ${tab.category === selectedTab && "bg-gray-700/10"}
                 `}
               >
                 {tab.name}
-                {tab.category === seletedTab ? (
+                {tab.category === selectedTab ? (
                   <motion.div
                     className="absolute h-[2px] w-full bottom-0 bg-amber-900"
                     layoutId="underline"
@@ -47,6 +47,16 @@ export default function CommunityNav() {
               </Link>
             </li>
           ))}
+        </ul>
+        <ul className="flex items-center">
+          <li>
+            <Link
+              href={"/community/regist"}
+              className="flex items-center p-1 px-5"
+            >
+              <HiOutlinePencilAlt className="text-2xl" />
+            </Link>
+          </li>
         </ul>
       </nav>
     </>
