@@ -34,7 +34,7 @@ export async function GET(request: Request) {
       authorEmail: true,
     },
     orderBy: {
-      createdAt: "asc",
+      createdAt: "desc",
     },
   });
 
