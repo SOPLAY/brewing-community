@@ -8,9 +8,7 @@ const postExampleData = {
   title: "자유게시판 테스트",
   category: "free",
   views: 0,
-  author: {
-    email: "test@email.com",
-  },
+  authorEmail: "test@email.com",
 };
 
 export type IPostDescription = typeof postExampleData;

@@ -26,7 +26,7 @@ model Account {
   id_token                 String?
   session_state            String?
 
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
 
   @@unique([provider, providerAccountId])
 }
@@ -52,6 +52,8 @@ model User {
   accounts      Account[]
   Post          Post[]
   Comment       Comment[]
+
+  @@unique([email, id])
 }
 
 model VerificationToken {
@@ -69,14 +71,15 @@ model Post {
   published Boolean  @default(true)
   views     Int      @default(0)
 
-  category  String
-  title     String
-  content   String
-  authorId  String
-  comments  Comment[]
-  imageList String[]
+  category    String
+  title       String
+  content     String
+  authorId    String
+  authorEmail String
+  comments    Comment[]
+  imageList   String[]
 
-  author User @relation(fields: [authorId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  author User @relation(fields: [authorId, authorEmail], references: [id, email], onDelete: Cascade, onUpdate: Cascade)
 }
 
 model Comment {
@@ -85,10 +88,11 @@ model Comment {
   updatedAt DateTime @updatedAt
   published Boolean  @default(true)
 
-  content  String
-  postId   String
-  authorId String
+  content     String
+  postId      String
+  authorId    String
+  authorEmail String
 
-  author User @relation(fields: [authorId], references: [id])
-  Post   Post @relation(fields: [postId], references: [id], onDelete: Cascade)
+  author User @relation(fields: [authorId, authorEmail], references: [id, email], onDelete: Cascade, onUpdate: Cascade)
+  Post   Post @relation(fields: [postId], references: [id], onDelete: Cascade, onUpdate: Cascade)
 }

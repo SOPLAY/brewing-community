@@ -11,7 +11,7 @@ const categoryFix = {
 interface Props extends IPostDescription {}
 export default function PostItem({
   id,
-  author: { email },
+  authorEmail,
   category,
   createdAt,
   title,
@@ -20,7 +20,7 @@ export default function PostItem({
   const date = new Date(createdAt);
 
   return (
-    <div className="flex w-full h-10 items-center border [&+&]:border-t-0 text-sm">
+    <div className="flex w-full h-10 items-center border [&+&]:border-t-0 text-sm pl-2">
       <div className="min-w-[80px] bg-gray-100 text-gray-700 flex justify-center items-center flex-shrink">
         <span>{categoryFix[category as keyof typeof categoryFix]}</span>
       </div>
@@ -31,9 +31,11 @@ export default function PostItem({
         {title}
       </Link>
       <div className="min-w-[160px] text-ellipsis overflow-hidden flex border-r justify-center ">
-        {email}
+        {authorEmail}
       </div>
-      <div className="min-w-[32px] flex border-r justify-center ">{views}</div>
+      <div className="min-w-[64px] flex border-r justify-center text-gray-500 text-xs">
+        {views}
+      </div>
       <div className="min-w-[64px] flex justify-center ">
         {`${
           date.getMonth() + 1 < 10
