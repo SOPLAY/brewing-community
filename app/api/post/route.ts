@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { getServerSession } from "next-auth";
 import { authOption } from "@/app/api/auth/[...nextauth]/route";
+import { revalidatePath } from "next/cache";
 
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
@@ -30,11 +31,7 @@ export async function GET(request: Request) {
       title: true,
       category: true,
       views: true,
-      author: {
-        select: {
-          email: true,
-        },
-      },
+      authorEmail: true,
     },
     orderBy: {
       createdAt: "asc",
@@ -80,115 +77,9 @@ export async function POST(request: Request) {
     },
   });
 
-  return NextResponse.json(
-    { post },
-    {
-      status: 201,
-    }
-  );
-}
+  revalidatePath("/community");
 
-export async function PUT(request: Request) {
-  const session = await getServerSession(authOption);
-  const body = await request.json();
-  const {
-    id,
-    category,
-    title,
-    content,
-  }: { id: string; category: string; title: string; content: string } = body;
-
-  if (!(session && category && title && content && id)) {
-    return NextResponse.json(
-      { message: "body혹은 로그인 유무를 확인해 주세요!" },
-      {
-        status: 400,
-      }
-    );
-  }
-
-  const currentPost = await prisma.post.findUnique({
-    where: {
-      author: {
-        email: session.user!.email!,
-      },
-      id,
-    },
+  return NextResponse.json(post, {
+    status: 201,
   });
-
-  if (!currentPost) {
-    return NextResponse.json(
-      { message: "해당 포스트를 수정할 권한이 없습니다." },
-      {
-        status: 400,
-      }
-    );
-  }
-
-  const updatedPost = await prisma.post.update({
-    where: {
-      id,
-    },
-    data: {
-      category,
-      title,
-      content,
-    },
-  });
-
-  return NextResponse.json(
-    { post: updatedPost },
-    {
-      status: 200,
-    }
-  );
-}
-
-export async function DELETE(request: Request) {
-  const session = await getServerSession(authOption);
-  const { searchParams } = new URL(request.url);
-  const id = searchParams.get("id");
-
-  if (!(session && id)) {
-    return NextResponse.json(
-      { message: "id 파라미터 혹은 로그인 유무를 확인해주세요!" },
-      {
-        status: 400,
-      }
-    );
-  }
-
-  const currentPost = await prisma.post.findUnique({
-    where: {
-      id,
-      author: {
-        email: session.user!.email!,
-      },
-    },
-  });
-
-  if (!currentPost) {
-    return NextResponse.json(
-      { message: "해당 포스트를 삭제할 권한이 없습니다." },
-      {
-        status: 400,
-      }
-    );
-  }
-
-  const deletedPost = await prisma.post.delete({
-    where: {
-      id,
-      author: {
-        email: session.user!.email!,
-      },
-    },
-  });
-
-  return NextResponse.json(
-    { post: deletedPost },
-    {
-      status: 200,
-    }
-  );
 }
