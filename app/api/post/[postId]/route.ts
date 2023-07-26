@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 import { authOption } from "@/app/api/auth/[...nextauth]/route";
 import { prisma } from "@/lib/prisma";
+import { revalidatePath } from "next/cache";
 
 type Params = { params: { postId: string } };
 export async function GET(request: Request, { params: { postId } }: Params) {
@@ -42,24 +43,6 @@ export async function PUT(request: Request, { params: { postId } }: Params) {
     );
   }
 
-  const currentPost = await prisma.post.findUnique({
-    where: {
-      author: {
-        email: session.user!.email!,
-      },
-      id: postId,
-    },
-  });
-
-  if (!currentPost) {
-    return NextResponse.json(
-      { message: "해당 포스트를 수정할 권한이 없습니다." },
-      {
-        status: 400,
-      }
-    );
-  }
-
   const updatedPost = await prisma.post.update({
     where: {
       id: postId,
@@ -71,12 +54,20 @@ export async function PUT(request: Request, { params: { postId } }: Params) {
     },
   });
 
-  return NextResponse.json(
-    { post: updatedPost },
-    {
-      status: 200,
-    }
-  );
+  if (!updatedPost) {
+    return NextResponse.json(
+      { message: "해당 포스트를 수정할 권한이 없습니다." },
+      {
+        status: 400,
+      }
+    );
+  }
+
+  revalidatePath("/community");
+
+  return NextResponse.json(updatedPost, {
+    status: 200,
+  });
 }
 
 export async function DELETE(request: Request, { params: { postId } }: Params) {
@@ -91,24 +82,6 @@ export async function DELETE(request: Request, { params: { postId } }: Params) {
     );
   }
 
-  const currentPost = await prisma.post.findUnique({
-    where: {
-      id: postId,
-      author: {
-        email: session.user!.email!,
-      },
-    },
-  });
-
-  if (!currentPost) {
-    return NextResponse.json(
-      { message: "해당 포스트를 삭제할 권한이 없습니다." },
-      {
-        status: 400,
-      }
-    );
-  }
-
   const deletedPost = await prisma.post.delete({
     where: {
       id: postId,
@@ -117,6 +90,17 @@ export async function DELETE(request: Request, { params: { postId } }: Params) {
       },
     },
   });
+
+  if (!deletedPost) {
+    return NextResponse.json(
+      { message: "해당 포스트를 삭제할 권한이 없습니다." },
+      {
+        status: 400,
+      }
+    );
+  }
+
+  revalidatePath("/community");
 
   return NextResponse.json(
     { post: deletedPost },
