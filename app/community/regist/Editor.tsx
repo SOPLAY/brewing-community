@@ -24,9 +24,11 @@ type Props = {
     title?: string;
     content?: string;
     category?: "free" | "brewing" | "";
+    id?: string;
   };
+  type?: "create" | "edit";
 };
-export default function Editor({ initailData }: Props) {
+export default function Editor({ initailData, type = "create" }: Props) {
   const router = useRouter();
   const editorRef = useRef(null);
   const [title, setTitle] = useState(initailData?.title || "");
@@ -48,18 +50,30 @@ export default function Editor({ initailData }: Props) {
         category,
       };
 
-      await axios
-        .post("/api/post", body)
-        .then(async (res) => {
-          const { id } = res.data;
-          router.push(`/community/post/${id}`);
-          router.refresh();
-        })
-        .catch((err) => {
-          toast.error("게시글을 장석하는도중 오류가 발생했습니다.");
-        });
+      if (type === "create") {
+        await axios
+          .post("/api/post", body)
+          .then(async (res) => {
+            const { id } = res.data;
+            router.push(`/community/post/${id}`);
+          })
+          .catch((err) => {
+            toast.error("게시글을 작성하는도중 오류가 발생했습니다.");
+          });
+      } else {
+        await axios
+          .put(`/api/post/${initailData?.id}`, body)
+          .then(async (res) => {
+            const { id } = res.data;
+            router.push(`?mode=viewer`);
+            router.refresh();
+          })
+          .catch((err) => {
+            toast.error("게시글을 작성하는도중 오류가 발생했습니다.");
+          });
+      }
     },
-    [title, category]
+    [title, category, type]
   );
 
   return (
@@ -69,6 +83,7 @@ export default function Editor({ initailData }: Props) {
         placeholder="제목을 입력하세요!"
         className="placeholder:text-gray-500 text-[40px] font-bold outline-none w-full"
         onChange={onInputChange}
+        value={title}
       />
       <div className="w-[72px] h-[10px] bg-[#111827] mt-4 mb-[21px]" />
       <details className="dropdown relative mb-[32px]">
@@ -102,7 +117,7 @@ export default function Editor({ initailData }: Props) {
           className="btn bg-green-600 text-base px-10 hover:bg-green-800"
           onClick={onSubmitPost}
         >
-          게시하기
+          {type === "create" ? "게시하기" : "수정하기"}
         </button>
       </div>
     </div>
