@@ -82,7 +82,7 @@ export default async function Page({ params, searchParams: { mode } }: Props) {
       </h3>
       <h2 className="text-[40px] font-bold w-full">{data.title}</h2>
       <Viewer content={data.content} />
-      <Comment commentList={data.comments} />
+      <Comment commentList={data.comments} postId={params.postId} />
     </div>
   );
 }
