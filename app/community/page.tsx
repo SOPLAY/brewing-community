@@ -3,7 +3,7 @@ import PostList from "@/components/Post/PostList";
 import { baseURL } from "@/lib/axios";
 import CommunityNav from "@/app/community/CommunityNav";
 
-export const revalidate = 60;
+export const revalidate = 20;
 
 const getPostData = async (category: string, page: number, pageSize: number) =>
   await fetch(
