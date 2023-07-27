@@ -11,7 +11,11 @@ export async function GET(request: Request, { params: { postId } }: Params) {
       id: postId,
     },
     include: {
-      comments: true,
+      comments: {
+        orderBy: {
+          createdAt: "asc",
+        },
+      },
     },
   });
 
