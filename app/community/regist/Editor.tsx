@@ -33,10 +33,15 @@ export default function Editor({ initailData, type = "create" }: Props) {
   const editorRef = useRef(null);
   const [title, setTitle] = useState(initailData?.title || "");
   const [category, setCategory] = useState(initailData?.category || "");
-
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const onInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setTitle(event.target.value);
   };
+  const onDropdownClick = () => {
+    setIsDropdownOpen(!isDropdownOpen);
+  };
+  const displayState = () => (isDropdownOpen ? "block" : "none");
+
   const onSubmitPost = useCallback(
     async (event: React.MouseEvent<HTMLButtonElement>) => {
       const content = (editorRef.current as any).getInstance().getHTML();
@@ -86,14 +91,27 @@ export default function Editor({ initailData, type = "create" }: Props) {
         value={title}
       />
       <div className="w-[72px] h-[10px] bg-[#111827] mt-4 mb-[21px]" />
-      <details className="dropdown relative mb-[32px]">
-        <summary className="btn btn-ghost hover:bg-transparent text-gray-700/70 text-[20px] font-bold p-0">
+      <details
+        className="dropdown relative mb-[32px]"
+        onClick={onDropdownClick}
+      >
+        <summary
+          className={`btn btn-ghost hover:bg-transparent text-gray-700/70 text-[20px] font-bold p-0 ${
+            !!category && "text-black"
+          }`}
+        >
           {category
             ? categoryList.find((v) => v.category === category)?.name
             : "카테고리를 선택하세요"}
-          <BiSolidDownArrow />
+          {(!category ||
+            (!!category && category === initailData?.category)) && (
+            <BiSolidDownArrow />
+          )}
         </summary>
-        <ul className="p-2 shadow menu dropdown-content z-[1] bg-base-100 rounded-box w-52">
+        <ul
+          style={{ display: displayState() }}
+          className={`p-2 shadow menu dropdown-content z-[1] bg-base-100 rounded-box w-52`}
+        >
           {categoryList.map(({ category, name }) => (
             <li
               key={`regist-${category}`}
