@@ -1,0 +1,98 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// next-auth Schema
+model Account {
+  id                       String  @id @default(cuid())
+  userId                   String
+  type                     String
+  provider                 String
+  providerAccountId        String
+  refresh_token            String?
+  access_token             String?
+  expires_at               Int?
+  refresh_token_expires_in Int?
+  token_type               String?
+  scope                    String?
+  id_token                 String?
+  session_state            String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+  @@unique([provider, providerAccountId])
+}
+
+// 로그인 세션을 DB에 따로 저장하지 않고 jwt로 관리
+// model Session {
+//   id           String   @id @default(cuid())
+//   sessionToken String   @unique
+//   userId       String
+//   expires      DateTime
+//   user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+// }
+
+model User {
+  id            String    @id @default(cuid())
+  name          String?
+  bio           String?
+  age           Int?
+  email         String    @unique
+  emailVerified DateTime?
+  image         String?
+  password      String?
+  accounts      Account[]
+  Post          Post[]
+  Comment       Comment[]
+
+  @@unique([email, id])
+}
+
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+}
+
+model Post {
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  published Boolean  @default(true)
+  views     Int      @default(0)
+
+  category    String
+  title       String
+  content     String
+  authorId    String
+  authorEmail String
+  comments    Comment[]
+  imageList   String[]
+
+  author User @relation(fields: [authorId, authorEmail], references: [id, email], onDelete: Cascade, onUpdate: Cascade)
+}
+
+model Comment {
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  published Boolean  @default(true)
+
+  content     String
+  postId      String
+  authorId    String
+  authorEmail String
+
+  author User @relation(fields: [authorId, authorEmail], references: [id, email], onDelete: Cascade, onUpdate: Cascade)
+  post   Post @relation(fields: [postId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+}
