@@ -1,13 +1,14 @@
 import { prisma } from "@/lib/prisma";
 import { makeHash } from "@/lib/bcrypt";
+import { NextResponse } from "next/server";
 
 export async function POST(request: Request) {
   const body = await request.json();
 
   //전달 받은 값이 비어있는경우
   if (!(!!body.email && !!body.password))
-    return new Response(
-      JSON.stringify({ message: "이메일 혹은 비밀번호가 비어있습니다." }),
+    return NextResponse.json(
+      { message: "이메일 혹은 비밀번호가 비어있습니다." },
       { status: 400 }
     );
 
@@ -18,8 +19,8 @@ export async function POST(request: Request) {
     },
   });
   if (checkUser)
-    return new Response(
-      JSON.stringify({ message: "이메일이 이미 사용중입니다." }),
+    return NextResponse.json(
+      { message: "이메일이 이미 사용중입니다." },
       { status: 409 }
     );
 
@@ -33,7 +34,7 @@ export async function POST(request: Request) {
     },
   });
 
-  return new Response(JSON.stringify(user), {
+  return NextResponse.json(user, {
     status: 201,
   });
 }
