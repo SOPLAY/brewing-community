@@ -1,9 +1,12 @@
 "use client";
 
 import Link from "next/link";
-import { useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { motion } from "framer-motion";
 import { HiOutlinePencilAlt } from "react-icons/hi";
+import { BiSearch } from "react-icons/bi";
+import { useRef, useState } from "react";
+import { MdClose } from "react-icons/md";
 
 const tabs = [
   {
@@ -21,6 +24,14 @@ const tabs = [
 ];
 export default function CommunityNav() {
   const selectedTab = useSearchParams().get("category") || "all";
+  const router = useRouter();
+  const dialogRef = useRef<HTMLDialogElement | null>(null);
+  const [searchText, setSearchText] = useState("");
+
+  const onSubmit = () => {
+    !!searchText && router.push(`/community/search?q=${searchText}`);
+  };
+
   return (
     <>
       <nav className="mb-[2px] flex justify-between font-semibold">
@@ -48,13 +59,54 @@ export default function CommunityNav() {
             </li>
           ))}
         </ul>
-        <ul className="flex items-center">
+        <ul className="flex items-center text-2xl">
+          <li>
+            <button
+              onClick={() => {
+                dialogRef.current?.showModal();
+                setSearchText("");
+              }}
+              className="flex items-center"
+            >
+              <BiSearch />
+            </button>
+            <dialog className="modal" ref={dialogRef}>
+              <form
+                method="dialog"
+                className="modal-box bg-transparent shadow-none flex justify-center p-2 w-fit rounded-none"
+                onSubmit={onSubmit}
+              >
+                <div className="flex border-b text-white w-fit">
+                  <input
+                    type="text"
+                    placeholder="검색어를 입력하세요"
+                    className=" text-[16px] font-bold outline-none w-[200px] bg-transparent"
+                    value={searchText}
+                    onChange={(e) => setSearchText(e.target.value)}
+                  />
+                  <button>
+                    <BiSearch />
+                  </button>
+                </div>
+              </form>
+              <form
+                method="dialog"
+                className="modal-backdrop bg-black/80 text-white relative"
+              >
+                <button className="cursor-default">
+                  <div className="absolute top-0 right-0 p-6 text-4xl cursor-pointer">
+                    <MdClose />
+                  </div>
+                </button>
+              </form>
+            </dialog>
+          </li>
           <li>
             <Link
               href={"/community/regist"}
               className="flex items-center p-1 px-5"
             >
-              <HiOutlinePencilAlt className="text-2xl" />
+              <HiOutlinePencilAlt className="" />
             </Link>
           </li>
         </ul>

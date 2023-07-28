@@ -5,6 +5,7 @@ import Link from "next/link";
 import { getServerSession } from "next-auth";
 import { authOption } from "@/app/api/auth/[...nextauth]/route";
 import Comment from "@/components/Comment";
+import DeleteBtn from "@/app/community/post/[postId]/DeleteBtn";
 
 const Editor = dynamic(() => import("@/app/community/regist/Editor"), {
   ssr: false,
@@ -52,6 +53,7 @@ export default async function Page({ params, searchParams: { mode } }: Props) {
   const session = await getServerSession(authOption);
   const data = await getPost(params.postId);
   const isAuthor = data.authorEmail === session?.user?.email;
+
   if (data) {
     updateViews(params.postId);
   }
@@ -75,9 +77,15 @@ export default async function Page({ params, searchParams: { mode } }: Props) {
           <span>{data.category === "free" ? "자유" : "브루잉"}</span>
         </Link>
         {isAuthor && (
-          <Link href={`?mode=edit`}>
-            <HiOutlinePencilAlt className="text-2xl" />
-          </Link>
+          <div className="flex items-center text-2xl">
+            <Link
+              href={`?mode=edit`}
+              className="px-2 hover:text-green-600 duration-300"
+            >
+              <HiOutlinePencilAlt />
+            </Link>
+            <DeleteBtn postId={params.postId} />
+          </div>
         )}
       </h3>
       <h2 className="text-[40px] font-bold w-full">{data.title}</h2>

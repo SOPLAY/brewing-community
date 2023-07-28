@@ -89,9 +89,7 @@ export async function DELETE(request: Request, { params: { postId } }: Params) {
   const deletedPost = await prisma.post.delete({
     where: {
       id: postId,
-      author: {
-        email: session.user!.email!,
-      },
+      authorEmail: session.user!.email!,
     },
   });
 
