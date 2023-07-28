@@ -68,6 +68,7 @@ export async function PUT(request: Request, { params: { postId } }: Params) {
   }
 
   revalidatePath("/community");
+  revalidatePath("/community/search");
   revalidatePath("/");
 
   return NextResponse.json(updatedPost, {
@@ -104,6 +105,7 @@ export async function DELETE(request: Request, { params: { postId } }: Params) {
   }
 
   revalidatePath("/community");
+  revalidatePath("/community/search");
   revalidatePath("/");
 
   return NextResponse.json(

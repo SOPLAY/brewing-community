@@ -78,6 +78,7 @@ export async function POST(request: Request) {
   });
 
   revalidatePath("/community");
+  revalidatePath("/community/search");
 
   return NextResponse.json(post, {
     status: 201,
