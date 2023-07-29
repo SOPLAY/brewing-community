@@ -7,7 +7,7 @@ import { authOption } from "@/app/api/auth/[...nextauth]/route";
 import Comment from "@/components/Comment";
 import DeleteBtn from "@/app/community/post/[postId]/DeleteBtn";
 
-const Editor = dynamic(() => import("@/app/community/regist/Editor"), {
+const Editor = dynamic(() => import("@/app/community/new/Editor"), {
   ssr: false,
 });
 const Viewer = dynamic(() => import("./Viewer"), {

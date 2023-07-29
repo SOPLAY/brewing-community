@@ -103,7 +103,7 @@ export default function CommunityNav() {
           </li>
           <li>
             <Link
-              href={"/community/regist"}
+              href={"/community/new"}
               className="flex items-center p-1 px-5"
             >
               <HiOutlinePencilAlt className="" />
