@@ -110,9 +110,10 @@ model Recipe {
   title       String
   roasting    String
   gram        Int
-  dripper     String
+  stepCnt     Int
+  dripper     String?
+  degrees     Int
   content     String
-  totalTime   Int       @default(0)
   authorId    String
   authorEmail String
   rating      Rating[]
