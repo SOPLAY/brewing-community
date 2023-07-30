@@ -2,6 +2,7 @@ import { getServerSession } from "next-auth";
 import { authOption } from "@/app/api/auth/[...nextauth]/route";
 import { prisma } from "@/lib/prisma";
 import { NextResponse } from "next/server";
+import { revalidatePath } from "next/cache";
 
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
@@ -47,10 +48,11 @@ export async function POST(request: Request) {
     );
 
   if (
-    !body.content ||
     !body.title ||
     !body.roasting ||
-    !body.dripper ||
+    !body.stepCnt ||
+    !body.degrees ||
+    !body.content ||
     !body.gram
   )
     return NextResponse.json(
@@ -62,11 +64,8 @@ export async function POST(request: Request) {
 
   const recipe = await prisma.recipe.create({
     data: {
-      title: body.title,
-      content: body.content,
-      roasting: body.roasting,
-      dripper: body.dripper,
-      gram: body.gram,
+      ...body,
+      content: JSON.stringify(body.content),
       author: {
         connect: {
           email: session.user!.email!,
@@ -74,12 +73,13 @@ export async function POST(request: Request) {
       },
     },
   });
-
+  revalidatePath("/recipe");
+  revalidatePath("/");
   if (!recipe)
     return NextResponse.json(
       { message: "레시피를 생성하는도중 얼 수 없는 오류가 발생했습니다" },
       { status: 500 }
     );
 
-  return NextResponse.json(recipe, { status: 500 });
+  return NextResponse.json(recipe, { status: 201 });
 }
