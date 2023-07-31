@@ -7,9 +7,6 @@ import { authOption } from "@/app/api/auth/[...nextauth]/route";
 import Comment from "@/components/Comment";
 import DeleteBtn from "@/components/Button/DeleteBtn";
 
-const Editor = dynamic(() => import("@/app/community/new/Editor"), {
-  ssr: false,
-});
 const Viewer = dynamic(() => import("./Viewer"), {
   ssr: false,
   loading: () => (
@@ -38,9 +35,6 @@ type Props = {
   params: {
     postId: string;
   };
-  searchParams: {
-    mode?: string;
-  };
 };
 
 export async function generateMetadata({ params }: Props) {
@@ -51,25 +45,13 @@ export async function generateMetadata({ params }: Props) {
   };
 }
 
-export default async function Page({ params, searchParams: { mode } }: Props) {
+export default async function Page({ params }: Props) {
   const session = await getServerSession(authOption);
   const data = await getPost(params.postId);
   const isAuthor = data.authorEmail === session?.user?.email;
 
   if (data) {
     updateViews(params.postId);
-  }
-
-  if (mode === "edit" && !isAuthor) {
-    return (
-      <div className="flex justify-center items-center mt-14">
-        해당 게시글을 수정할 권한이 없습니다.
-      </div>
-    );
-  }
-
-  if (mode === "edit") {
-    return <Editor initailData={data} type="edit" />;
   }
 
   return (
@@ -81,7 +63,7 @@ export default async function Page({ params, searchParams: { mode } }: Props) {
         {isAuthor && (
           <div className="flex items-center text-2xl">
             <Link
-              href={`?mode=edit`}
+              href={`/community/post/${params.postId}/edit`}
               className="px-2 hover:text-green-600 duration-300"
             >
               <HiOutlinePencilAlt />
