@@ -65,7 +65,6 @@ export async function POST(request: Request) {
   const recipe = await prisma.recipe.create({
     data: {
       ...body,
-      content: JSON.stringify(body.content),
       author: {
         connect: {
           email: session.user!.email!,
