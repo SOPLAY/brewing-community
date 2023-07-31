@@ -70,6 +70,7 @@ export default function RecipeEditor({ initValue, submitUrl, type }: Props) {
   );
   const [stepCnt, setStepCnt] = useState(initValue?.stepCnt || 1);
   const formRef = useRef<HTMLFormElement | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
 
   const onFormSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -90,6 +91,7 @@ export default function RecipeEditor({ initValue, submitUrl, type }: Props) {
     };
     if (!body.title || !body.gram || !body.degrees)
       return toast.error("제목, 원두 투입량 혹은 물 온도를 확인해주세요!");
+    setIsLoading(true);
     await axios({
       method: type === "create" ? "post" : "put",
       url: submitUrl,
@@ -97,7 +99,6 @@ export default function RecipeEditor({ initValue, submitUrl, type }: Props) {
     })
       .then((res) => {
         const { id } = res.data;
-        toast.success("레시피를 생성했습니다.");
         router.replace("/");
         router.refresh();
         router.replace("/recipe");
@@ -105,9 +106,10 @@ export default function RecipeEditor({ initValue, submitUrl, type }: Props) {
         router.push(`/recipe/${id}`);
         router.refresh();
       })
-      .catch(() =>
-        toast.error("레시피 생성중 알 수 없는 오류가 발생했습니다.")
-      );
+      .catch(() => {
+        toast.error("레시피 생성중 알 수 없는 오류가 발생했습니다.");
+        setIsLoading(false);
+      });
   };
 
   return (
@@ -220,8 +222,17 @@ export default function RecipeEditor({ initValue, submitUrl, type }: Props) {
           <Divider />
         </Fragment>
       ))}
-      <Button type={"submit"} size={"lg"} variant="primary">
-        게시하기
+      <Button
+        type={"submit"}
+        size={"lg"}
+        variant="primary"
+        disabled={isLoading}
+      >
+        {isLoading ? (
+          <span className="loading loading-spinner loading-md" />
+        ) : (
+          "게시하기"
+        )}
       </Button>
     </form>
   );

@@ -7,6 +7,7 @@ import { BiSolidDownArrow } from "react-icons/bi";
 import { toast } from "react-toastify";
 import axios from "@/lib/axios";
 import { useRouter } from "next/navigation";
+import { Button } from "@/components/Button/Button";
 
 const categoryList = [
   {
@@ -34,6 +35,7 @@ export default function Editor({ initailData, type = "create" }: Props) {
   const [title, setTitle] = useState(initailData?.title || "");
   const [category, setCategory] = useState(initailData?.category || "");
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const onInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setTitle(event.target.value);
   };
@@ -42,55 +44,56 @@ export default function Editor({ initailData, type = "create" }: Props) {
   };
   const displayState = () => (isDropdownOpen ? "block" : "none");
 
-  const onSubmitPost = useCallback(
-    async (event: React.MouseEvent<HTMLButtonElement>) => {
-      const content = (editorRef.current as any).getInstance().getHTML();
-      if (!(title && content && category)) {
-        toast.error("제목, 카테고리 혹은 내용을 확인해주세요!");
-        return null;
-      }
-      const body = {
-        title,
-        content,
-        category,
-      };
+  const onSubmitPost = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    const content = (editorRef.current as any).getInstance().getHTML();
+    if (!(title && content && category)) {
+      toast.error("제목, 카테고리 혹은 내용을 확인해주세요!");
+      return null;
+    }
+    const body = {
+      title,
+      content,
+      category,
+    };
 
-      if (type === "create") {
-        await axios
-          .post("/api/post", body)
-          .then(async (res) => {
-            const { id } = res.data;
-            router.replace("/");
-            router.refresh();
-            router.replace("/community");
-            router.refresh();
-            router.push(`/community/post/${id}`);
-          })
-          .catch((err) => {
-            toast.error("게시글을 작성하는도중 오류가 발생했습니다.");
-          });
-      } else {
-        await axios
-          .put(`/api/post/${initailData?.id}`, body)
-          .then(async (res) => {
-            const { id } = res.data;
-            router.replace("/");
-            router.refresh();
-            router.replace("/community");
-            router.refresh();
-            router.push(`/community/post/${id}`);
-            router.refresh();
-          })
-          .catch((err) => {
-            toast.error("게시글을 작성하는도중 오류가 발생했습니다.");
-          });
-      }
-    },
-    [title, category, type]
-  );
+    setIsLoading(true);
+    if (type === "create") {
+      await axios
+        .post("/api/post", body)
+        .then(async (res) => {
+          const { id } = res.data;
+          router.replace("/");
+          router.refresh();
+          router.replace("/community");
+          router.refresh();
+          router.push(`/community/post/${id}`);
+        })
+        .catch((err) => {
+          toast.error("게시글을 작성하는도중 오류가 발생했습니다.");
+          setIsLoading(false);
+        });
+    } else {
+      await axios
+        .put(`/api/post/${initailData?.id}`, body)
+        .then(async (res) => {
+          const { id } = res.data;
+          router.replace("/");
+          router.refresh();
+          router.replace("/community");
+          router.refresh();
+          router.push(`/community/post/${id}`);
+          router.refresh();
+        })
+        .catch((err) => {
+          toast.error("게시글을 작성하는도중 오류가 발생했습니다.");
+          setIsLoading(false);
+        });
+    }
+  };
 
   return (
-    <div className="p-[10px]">
+    <form onSubmit={onSubmitPost} className="p-[10px]">
       <input
         type="text"
         placeholder="제목을 입력하세요!"
@@ -139,13 +142,21 @@ export default function Editor({ initailData, type = "create" }: Props) {
         ref={editorRef}
       />
       <div className="flex justify-end mt-4">
-        <button
-          className="btn bg-green-600 text-base px-10 hover:bg-green-800"
-          onClick={onSubmitPost}
+        <Button
+          type={"submit"}
+          size={"lg"}
+          variant="primary"
+          disabled={isLoading}
         >
-          {type === "create" ? "게시하기" : "수정하기"}
-        </button>
+          {isLoading ? (
+            <span className="loading loading-spinner loading-md" />
+          ) : type === "create" ? (
+            "게시하기"
+          ) : (
+            "수정하기"
+          )}
+        </Button>
       </div>
-    </div>
+    </form>
   );
 }
