@@ -7,6 +7,7 @@ import { BiSolidCoffeeBean } from "react-icons/bi";
 import { Button } from "@/components/Button/Button";
 import { roastingPoint as roastingPointData } from "@/components/recipe/RecipeCard";
 import axios from "@/lib/axios";
+import Divider from "@/components/Divder";
 
 const roastingPoint = roastingPointData;
 type IRoastingKey = keyof typeof roastingPoint;
@@ -42,10 +43,10 @@ const NumField = (props: {
     </div>
   </div>
 );
-const Divider = () => <span className="divider" />;
 
 type Props = {
   initValue?: {
+    id: string;
     roasting: IRoastingKey;
     stepCnt: number;
     title: string;
@@ -80,13 +81,12 @@ export default function RecipeEditor({ initValue, submitUrl, type }: Props) {
       gram: +formData.get("gram")!,
       dripper: formData.get("dripper")!,
       degrees: +formData.get("degrees")!,
-      content: [
+      content: JSON.stringify([
         ...Array.from({ length: stepCnt + 1 }).map((_, i) => ({
-          step: i,
           water: +formData.get(`${i}_water`)!,
           seconds: +formData.get(`${i}_seconds`)!,
         })),
-      ],
+      ]),
     };
     if (!body.title || !body.gram || !body.degrees)
       return toast.error("제목, 원두 투입량 혹은 물 온도를 확인해주세요!");
@@ -97,7 +97,8 @@ export default function RecipeEditor({ initValue, submitUrl, type }: Props) {
     })
       .then(() => {
         toast.success("레시피를 생성했습니다.");
-        router.push("/recipe");
+        router.push(`/recipe${type === "edit" ? `/${initValue?.id}` : ""}`);
+        router.refresh();
       })
       .catch(() =>
         toast.error("레시피 생성중 알 수 없는 오류가 발생했습니다.")

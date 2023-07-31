@@ -1,6 +1,7 @@
 import { IComment } from "@/components/Comment";
 import { BiSolidCoffeeBean, BiTimer } from "react-icons/bi";
 import { MdCoffeeMaker } from "react-icons/md";
+import Link from "next/link";
 
 export type IRating = {
   id: string;
@@ -55,7 +56,10 @@ export default function RecipeCard(props: Props) {
   const [minutes, seconds] = [Math.floor(totalSeconds / 60), totalSeconds % 60];
 
   return (
-    <div className="flex flex-col rounded-2xl text-lg p-5 shadow-md bg-base hover:scale-105 duration-300 ease-in-out cursor-pointer">
+    <Link
+      href={`/recipe/${props.id}`}
+      className="flex flex-col rounded-2xl text-lg p-5 shadow-md bg-base hover:scale-105 duration-300 ease-in-out cursor-pointer"
+    >
       <h3 className="text-center text-2xl font-bold mb-5 overflow-hidden text-ellipsis whitespace-nowrap">
         {props.title}
       </h3>
@@ -80,6 +84,6 @@ export default function RecipeCard(props: Props) {
           </p>
         </div>
       </div>
-    </div>
+    </Link>
   );
 }
