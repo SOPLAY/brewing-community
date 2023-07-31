@@ -98,6 +98,8 @@ export default function RecipeEditor({ initValue, submitUrl, type }: Props) {
       .then((res) => {
         const { id } = res.data;
         toast.success("레시피를 생성했습니다.");
+        router.replace("/");
+        router.refresh();
         router.replace("/recipe");
         router.refresh();
         router.push(`/recipe/${id}`);
