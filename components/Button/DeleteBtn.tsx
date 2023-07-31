@@ -7,17 +7,18 @@ import { useRef } from "react";
 
 type Props = {
   postId: string;
+  type?: "post" | "recipe";
 };
-export default function DeleteBtn(props: Props) {
+export default function DeleteBtn({ postId, type = "post" }: Props) {
   const router = useRouter();
   const dialogRef = useRef<HTMLDialogElement | null>(null);
 
   const onDelete = async () => {
     await axios
-      .delete(`/api/post/${props.postId}`)
+      .delete(`/api/${type}/${postId}`)
       .then(() => {
-        router.replace("/community");
         toast.success("게시글 삭제 되었습니다.");
+        router.push(`/${type === "post" ? "community" : "recipe"}`);
         router.refresh();
       })
       .catch(() => toast.error("게시글 삭제 도중 오류가 발생했습니다."));

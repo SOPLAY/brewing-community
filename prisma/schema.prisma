@@ -52,6 +52,8 @@ model User {
   accounts      Account[]
   Post          Post[]
   Comment       Comment[]
+  Recipe        Recipe[]
+  rating        Rating[]
 
   @@unique([email, id])
 }
@@ -89,10 +91,47 @@ model Comment {
   published Boolean  @default(true)
 
   content     String
-  postId      String
+  postId      String?
+  recipeId    String?
   authorId    String
   authorEmail String
 
+  author User    @relation(fields: [authorId, authorEmail], references: [id, email], onDelete: Cascade, onUpdate: Cascade)
+  post   Post?   @relation(fields: [postId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  recipe Recipe? @relation(fields: [recipeId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+}
+
+model Recipe {
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  published Boolean  @default(true)
+
+  title       String
+  roasting    String
+  gram        Int
+  stepCnt     Int
+  dripper     String?
+  degrees     Int
+  content     String
+  authorId    String
+  authorEmail String
+  rating      Rating[]
+  comments    Comment[]
+
   author User @relation(fields: [authorId, authorEmail], references: [id, email], onDelete: Cascade, onUpdate: Cascade)
-  post   Post @relation(fields: [postId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+}
+
+model Rating {
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  rating      String
+  authorEmail String
+  authorId    String
+  recipeId    String?
+
+  author User    @relation(fields: [authorId, authorEmail], references: [email, id], onDelete: Cascade, onUpdate: Cascade)
+  Recipe Recipe? @relation(fields: [recipeId], references: [id], onDelete: Cascade, onUpdate: Cascade)
 }

@@ -7,6 +7,7 @@ import { HiOutlinePencilAlt } from "react-icons/hi";
 import { BiSearch } from "react-icons/bi";
 import { useRef, useState } from "react";
 import { MdClose } from "react-icons/md";
+import { useSession } from "next-auth/react";
 
 const tabs = [
   {
@@ -23,6 +24,7 @@ const tabs = [
   },
 ];
 export default function CommunityNav() {
+  const session = useSession();
   const selectedTab = useSearchParams().get("category") || "all";
   const router = useRouter();
   const dialogRef = useRef<HTMLDialogElement | null>(null);
@@ -101,14 +103,16 @@ export default function CommunityNav() {
               </form>
             </dialog>
           </li>
-          <li>
-            <Link
-              href={"/community/regist"}
-              className="flex items-center p-1 px-5"
-            >
-              <HiOutlinePencilAlt className="" />
-            </Link>
-          </li>
+          {session.status === "authenticated" && (
+            <li>
+              <Link
+                href={"/community/new"}
+                className="flex items-center p-1 px-5"
+              >
+                <HiOutlinePencilAlt className="" />
+              </Link>
+            </li>
+          )}
         </ul>
       </nav>
     </>

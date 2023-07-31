@@ -109,5 +109,6 @@ export async function DELETE(request: Request, { params: { postId } }: Params) {
     );
 
   revalidatePath("/community/post/[postId]");
+  revalidatePath("/community/search");
   return NextResponse.json({ message: "SUCCESS" }, { status: 202 });
 }

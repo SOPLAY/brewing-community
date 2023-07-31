@@ -17,7 +17,7 @@ const contentDataExample = {
   authorEmail: "test@email.com",
 };
 
-type IComment = typeof contentDataExample;
+export type IComment = typeof contentDataExample;
 
 type Props = {
   commentList: IComment[];

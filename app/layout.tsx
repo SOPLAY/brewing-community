@@ -21,7 +21,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="ko">
-      <body className={inter.className}>
+      <body className={`${inter.className} min-w-[450px] `}>
         <AuthProvider>
           <Header />
           <main className="pt-[60px] main-container">{children}</main>

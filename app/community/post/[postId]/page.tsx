@@ -5,9 +5,9 @@ import Link from "next/link";
 import { getServerSession } from "next-auth";
 import { authOption } from "@/app/api/auth/[...nextauth]/route";
 import Comment from "@/components/Comment";
-import DeleteBtn from "@/app/community/post/[postId]/DeleteBtn";
+import DeleteBtn from "@/components/Button/DeleteBtn";
 
-const Editor = dynamic(() => import("@/app/community/regist/Editor"), {
+const Editor = dynamic(() => import("@/app/community/new/Editor"), {
   ssr: false,
 });
 const Viewer = dynamic(() => import("./Viewer"), {
@@ -29,6 +29,7 @@ const getPost = async (id: string) =>
     async (res) => await res.json()
   );
 
+//TODO views의 업데이트는 post를 불러오는 단계에서 업데이트 하도록 변경 예정
 const updateViews = async (id: string) =>
   await fetch(`${baseURL}/api/post/${id}/views`, { cache: "no-cache" });
 
