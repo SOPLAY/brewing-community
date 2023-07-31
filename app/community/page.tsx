@@ -37,7 +37,6 @@ export default async function Page({
   searchParams: { category = "all", page = 0, pageSize = 20, email = "" },
 }: Props) {
   const data = await getPostData(category, page, pageSize, email);
-
   return (
     <>
       {!email ? <CommunityNav /> : <div className="mt-10" />}

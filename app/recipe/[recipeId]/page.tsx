@@ -9,6 +9,7 @@ import { roastingPoint } from "@/components/Recipe/RecipeCard";
 import { MdCoffeeMaker } from "react-icons/md";
 import Divider from "@/components/Divder";
 import { Fragment } from "react";
+import { redirect } from "next/navigation";
 
 const getData = async (id: string) =>
   await fetch(`${baseURL}/api/recipe/${id}`, {
@@ -38,6 +39,9 @@ type Props = {
 export default async function Page({ params: { recipeId } }: Props) {
   const session = await getServerSession(authOption);
   const data = await getData(recipeId);
+  if (!data.content) {
+    redirect("/404");
+  }
   const isAuthor = data.authorEmail === session?.user?.email;
   const totalSeconds: number = JSON.parse(data.content).reduce(
     (acc: number, cur: { seconds: number }) => acc + cur.seconds,

@@ -17,6 +17,8 @@ export default function DeleteBtn({ postId, type = "post" }: Props) {
     await axios
       .delete(`/api/${type}/${postId}`)
       .then(() => {
+        router.replace("/");
+        router.refresh();
         toast.success("게시글 삭제 되었습니다.");
         router.push(`/${type === "post" ? "community" : "recipe"}`);
         router.refresh();

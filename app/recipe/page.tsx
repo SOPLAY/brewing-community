@@ -27,15 +27,9 @@ export default async function Page({
   return (
     <main className="px-[20px] mb-10">
       <RecipeNav />
-      {!!data?.recipeList?.length ? (
-        <>
-          <RecipeList recipeList={data.recipeList} />
-          <PaginationButton max={data.pageSize} current={+page} />
-        </>
-      ) : (
-        <div className="text-xl text-center mt-20">
-          레시피가 존재하지 않습니다!
-        </div>
+      <RecipeList recipeList={data.recipeList} />
+      {!!data.recipeList.length && (
+        <PaginationButton max={data.pageSize} current={+page} />
       )}
     </main>
   );

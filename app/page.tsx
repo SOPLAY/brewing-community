@@ -5,7 +5,31 @@ import Bg1 from "@/public/assets/sign-bg.webp";
 import Image from "next/image";
 import Link from "next/link";
 import RecipeList from "@/components/Recipe/RecipeList";
-import Divider from "@/components/Divder";
+import { prisma } from "@/lib/prisma";
+import { NextResponse } from "next/server";
+import { cache } from "react";
+
+const getPostData = async () =>
+  await prisma.post.findMany({
+    take: 5,
+    where: {
+      published: true,
+    },
+    orderBy: {
+      createdAt: "desc",
+    },
+  });
+
+const getRecipeData = async () =>
+  await prisma.recipe.findMany({
+    take: 4,
+    where: {
+      published: true,
+    },
+    orderBy: {
+      createdAt: "desc",
+    },
+  });
 
 export const metadata: Metadata = {
   title: "브루잉 커뮤니티",
@@ -14,15 +38,8 @@ export const metadata: Metadata = {
 };
 export const revalidate = 10;
 export default async function Home() {
-  const postData = await fetch(`${baseURL}/api/post?pageSize=5`, {
-    cache: "reload",
-    next: { tags: ["postList", "post"] },
-  }).then(async (res) => await res.json());
-
-  const recipeData = await fetch(`${baseURL}/api/recipe?pageSize=4`, {
-    cache: "reload",
-    next: { tags: ["recipe", "recipeList"] },
-  }).then(async (res) => await res.json());
+  const postData = (await getPostData()) as any;
+  const recipeData = (await getRecipeData()) as any;
 
   return (
     <main>
@@ -50,13 +67,13 @@ export default async function Home() {
       <div className="flex flex-col gap-[30px] my-[30px]">
         <section className="px-[30px]">
           <div className="text-2xl font-bold mb-4">최근 추가된 레피시</div>
-          <RecipeList recipeList={recipeData.recipeList} />
+          <RecipeList recipeList={recipeData} />
         </section>
         <section className="px-[30px]">
           <div className="text-2xl font-bold mb-4">
             최근 추가된 커뮤니티 게시글
           </div>
-          <PostList postList={postData.postList} />
+          <PostList postList={postData} />
         </section>
       </div>
     </main>
