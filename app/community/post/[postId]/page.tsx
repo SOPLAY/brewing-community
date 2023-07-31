@@ -23,7 +23,6 @@ const Viewer = dynamic(() => import("./Viewer"), {
 
 const getPost = async (id: string) =>
   await fetch(`${baseURL}/api/post/${id}`, {
-    cache: "force-cache",
     next: { tags: ["post"] },
   }).then(async (res) => await res.json());
 

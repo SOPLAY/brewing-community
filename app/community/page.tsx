@@ -12,6 +12,7 @@ const getPostData = async (category: string, page: number, pageSize: number) =>
   await fetch(
     `${baseURL}/api/post?category=${category}&page=${page}&pageSize=${pageSize}`,
     {
+      cache: "reload",
       next: {
         tags: ["postList", "post"],
       },

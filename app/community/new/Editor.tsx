@@ -60,6 +60,10 @@ export default function Editor({ initailData, type = "create" }: Props) {
           .post("/api/post", body)
           .then(async (res) => {
             const { id } = res.data;
+            router.replace("/");
+            router.refresh();
+            router.replace("/community");
+            router.refresh();
             router.push(`/community/post/${id}`);
           })
           .catch((err) => {
@@ -70,7 +74,11 @@ export default function Editor({ initailData, type = "create" }: Props) {
           .put(`/api/post/${initailData?.id}`, body)
           .then(async (res) => {
             const { id } = res.data;
-            router.push(`?mode=viewer`);
+            router.replace("/");
+            router.refresh();
+            router.replace("/community");
+            router.refresh();
+            router.push(`/community/post/${id}`);
             router.refresh();
           })
           .catch((err) => {
