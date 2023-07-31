@@ -50,26 +50,13 @@ export default async function Home() {
       <div className="flex flex-col gap-[30px] my-[30px]">
         <section className="px-[30px]">
           <div className="text-2xl font-bold mb-4">최근 추가된 레피시</div>
-          {!!recipeData.recipeList.length ? (
-            <RecipeList recipeList={recipeData.recipeList} />
-          ) : (
-            <div className="flex justify-center items-center h-44 text-xl font-semibold">
-              아직 작성된 레시피가 없습니다!
-            </div>
-          )}
+          <RecipeList recipeList={recipeData.recipeList} />
         </section>
         <section className="px-[30px]">
           <div className="text-2xl font-bold mb-4">
             최근 추가된 커뮤니티 게시글
           </div>
-
-          {!!postData.postList.length ? (
-            <PostList postList={postData.postList} />
-          ) : (
-            <div className="flex justify-center items-center h-44 text-xl font-semibold">
-              아직 작성된 커뮤니티 게시글이 없습니다!
-            </div>
-          )}
+          <PostList postList={postData.postList} />
         </section>
       </div>
     </main>

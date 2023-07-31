@@ -19,9 +19,13 @@ interface Props {
 export default function PostList({ postList }: Props) {
   return (
     <div>
-      {postList?.map((postData) => (
-        <PostItem {...postData} key={postData.id} />
-      ))}
+      {!!postList.length ? (
+        postList.map((postData) => <PostItem {...postData} key={postData.id} />)
+      ) : (
+        <div className="flex justify-center items-center h-44 text-xl font-semibold">
+          아직 작성된 커뮤니티 게시글이 없습니다!
+        </div>
+      )}
     </div>
   );
 }
