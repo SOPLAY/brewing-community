@@ -5,8 +5,8 @@ import { Metadata } from "next";
 import PaginationButton from "@/components/Button/PaginationButton";
 
 export const metadata: Metadata = {
-  title: "브루잉 게시판",
-  description: "부루잉 커뮤니티의 브루잉 게시판 입니다!",
+  title: "레시피 - 브루잉 커뮤니티",
+  description: "브루잉 커뮤니티에서 나만의 레시피를 만들어보세요!",
 };
 export const revalidate = 10;
 const getData = async (page: number, pageSize: number) =>

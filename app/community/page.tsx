@@ -2,7 +2,12 @@ import PaginationButton from "@/components/Button/PaginationButton";
 import PostList from "@/components/Post/PostList";
 import { baseURL } from "@/lib/axios";
 import CommunityNav from "@/app/community/CommunityNav";
+import { Metadata } from "next";
 
+export const metadata: Metadata = {
+  title: "커뮤니티 게시판 - 브루잉 커뮤니티",
+  description: "브루잉 커뮤니티의 게시판 입니다!",
+};
 const getPostData = async (category: string, page: number, pageSize: number) =>
   await fetch(
     `${baseURL}/api/post?category=${category}&page=${page}&pageSize=${pageSize}`,

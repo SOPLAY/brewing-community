@@ -74,7 +74,7 @@ export default async function Page({ params, searchParams: { mode } }: Props) {
 
   return (
     <div className="p-[30px]">
-      <h3 className="text-gray-500 font-semibold text-xl flex justify-between">
+      <h2 className="text-gray-500 font-semibold text-xl flex justify-between">
         <Link href={`/community?category=${data.category}`}>
           <span>{data.category === "free" ? "자유" : "브루잉"}</span>
         </Link>
@@ -89,7 +89,7 @@ export default async function Page({ params, searchParams: { mode } }: Props) {
             <DeleteBtn postId={params.postId} />
           </div>
         )}
-      </h3>
+      </h2>
       <h2 className="text-[40px] font-bold w-full">{data.title}</h2>
       <Viewer content={data.content} />
       <Comment commentList={data.comments} postId={params.postId} />
