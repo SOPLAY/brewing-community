@@ -8,11 +8,13 @@ export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
   const page = parseInt(searchParams.get("page") || "0");
   const pageSize = parseInt(searchParams.get("pageSize") || "10");
+  const email = searchParams.get("email") || undefined;
 
   const pageLength = Math.ceil(
     (await prisma.recipe.count({
       where: {
         published: true,
+        authorEmail: email,
       },
     })) / pageSize
   );
@@ -22,6 +24,7 @@ export async function GET(request: Request) {
     take: pageSize,
     where: {
       published: true,
+      authorEmail: email,
     },
     include: {
       rating: true,

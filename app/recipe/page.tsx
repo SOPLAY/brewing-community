@@ -9,18 +9,21 @@ export const metadata: Metadata = {
   description: "브루잉 커뮤니티에서 나만의 레시피를 만들어보세요!",
 };
 export const revalidate = 10;
-const getData = async (page: number, pageSize: number) =>
-  await fetch(`${baseURL}/api/recipe?page=${page}&pageSize=${pageSize}`, {
-    next: { tags: ["recipe", "recipeList"] },
-  }).then(async (res) => await res.json());
+const getData = async (page: number, pageSize: number, email: string) =>
+  await fetch(
+    `${baseURL}/api/recipe?page=${page}&pageSize=${pageSize}&email=${email}`,
+    {
+      next: { tags: ["recipe", "recipeList"] },
+    }
+  ).then(async (res) => await res.json());
 
 type Props = {
-  searchParams: { page?: number; pageSize?: number };
+  searchParams: { page?: number; pageSize?: number; email?: string };
 };
 export default async function Page({
-  searchParams: { page = 0, pageSize = 10 },
+  searchParams: { page = 0, pageSize = 10, email = "" },
 }: Props) {
-  const data = await getData(+page, +pageSize);
+  const data = await getData(+page, +pageSize, email);
   return (
     <main className="px-[20px] mb-10">
       <RecipeNav />
