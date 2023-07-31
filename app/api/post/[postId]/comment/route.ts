@@ -2,7 +2,7 @@ import { getServerSession } from "next-auth";
 import { authOption } from "@/app/api/auth/[...nextauth]/route";
 import { prisma } from "@/lib/prisma";
 import { NextResponse } from "next/server";
-import { revalidatePath } from "next/cache";
+import { revalidatePath, revalidateTag } from "next/cache";
 
 type Params = { params: { postId: string } };
 export async function POST(request: Request, { params: { postId } }: Params) {
@@ -41,7 +41,7 @@ export async function POST(request: Request, { params: { postId } }: Params) {
       { message: "postId가 존재하지 않습니다.!" },
       { status: 400 }
     );
-  revalidatePath("/community/post/[postId]");
+  revalidateTag("post");
   return NextResponse.json({ message: "SUCCESS" }, { status: 201 });
 }
 
@@ -75,7 +75,7 @@ export async function PUT(request: Request, { params: { postId } }: Params) {
       { message: "id(commentId)가 존재하지 않습니다.!" },
       { status: 400 }
     );
-  revalidatePath(`/community/post/[postId]`);
+  revalidateTag("post");
   return NextResponse.json({ message: "SUCCESS" }, { status: 201 });
 }
 
@@ -108,7 +108,6 @@ export async function DELETE(request: Request, { params: { postId } }: Params) {
       { status: 400 }
     );
 
-  revalidatePath("/community/post/[postId]");
-  revalidatePath("/community/search");
+  revalidateTag("post");
   return NextResponse.json({ message: "SUCCESS" }, { status: 202 });
 }

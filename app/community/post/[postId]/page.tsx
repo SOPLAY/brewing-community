@@ -25,9 +25,10 @@ const Viewer = dynamic(() => import("./Viewer"), {
 });
 
 const getPost = async (id: string) =>
-  await fetch(`${baseURL}/api/post/${id}`, { cache: "force-cache" }).then(
-    async (res) => await res.json()
-  );
+  await fetch(`${baseURL}/api/post/${id}`, {
+    cache: "force-cache",
+    next: { tags: ["post"] },
+  }).then(async (res) => await res.json());
 
 //TODO views의 업데이트는 post를 불러오는 단계에서 업데이트 하도록 변경 예정
 const updateViews = async (id: string) =>

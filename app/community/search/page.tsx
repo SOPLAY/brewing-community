@@ -3,7 +3,9 @@ import { baseURL } from "@/lib/axios";
 import PostList from "@/components/Post/PostList";
 
 const getData = async (query: string) => {
-  const res = await fetch(`${baseURL}/api/post/search?search=${query}`);
+  const res = await fetch(`${baseURL}/api/post/search?search=${query}`, {
+    next: { tags: ["postList", "post"] },
+  });
   return await res.json();
 };
 type Props = { searchParams: { q: string } };

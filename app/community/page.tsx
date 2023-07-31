@@ -3,11 +3,14 @@ import PostList from "@/components/Post/PostList";
 import { baseURL } from "@/lib/axios";
 import CommunityNav from "@/app/community/CommunityNav";
 
-export const revalidate = 10;
-
 const getPostData = async (category: string, page: number, pageSize: number) =>
   await fetch(
-    `${baseURL}/api/post?category=${category}&page=${page}&pageSize=${pageSize}`
+    `${baseURL}/api/post?category=${category}&page=${page}&pageSize=${pageSize}`,
+    {
+      next: {
+        tags: ["postList", "post"],
+      },
+    }
   ).then(async (res) => await res.json());
 
 type Props = {

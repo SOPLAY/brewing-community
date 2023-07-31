@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { getServerSession } from "next-auth";
 import { authOption } from "@/app/api/auth/[...nextauth]/route";
-import { revalidatePath } from "next/cache";
+import { revalidatePath, revalidateTag } from "next/cache";
 
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
@@ -77,9 +77,8 @@ export async function POST(request: Request) {
     },
   });
 
+  revalidateTag("post");
   revalidatePath("/community");
-  revalidatePath("/community/search");
-
   return NextResponse.json(post, {
     status: 201,
   });

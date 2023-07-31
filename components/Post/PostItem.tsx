@@ -33,9 +33,9 @@ export default function PostItem({
       <div className="min-w-[160px] text-ellipsis overflow-hidden flex border-r justify-center ">
         {authorEmail}
       </div>
-      <div className="min-w-[64px] flex border-r justify-center text-gray-500 text-xs">
-        {views}
-      </div>
+      {/*<div className="min-w-[64px] flex border-r justify-center text-gray-500 text-xs">*/}
+      {/*  {views}*/}
+      {/*</div>*/}
       <div className="min-w-[64px] flex justify-center ">
         {`${
           date.getMonth() + 1 < 10
