@@ -1,5 +1,5 @@
 import { baseURL } from "@/lib/axios";
-import RecipeEditor from "@/components/recipe/RecipeEditor";
+import RecipeEditor from "@/components/Recipe/RecipeEditor";
 
 const getData = async (id: string) =>
   await fetch(`${baseURL}/api/recipe/${id}`, { cache: "no-cache" }).then(
