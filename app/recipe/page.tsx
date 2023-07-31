@@ -1,5 +1,5 @@
 import { baseURL } from "@/lib/axios";
-import RecipeList from "@/components/Recipe/RecipeList";
+import RecipeList from "@/components/recipe/RecipeList";
 import RecipeNav from "@/app/recipe/RecipeNav";
 import { Metadata } from "next";
 import PaginationButton from "@/components/Button/PaginationButton";

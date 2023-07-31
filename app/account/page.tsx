@@ -3,7 +3,7 @@ import { authOption } from "@/app/api/auth/[...nextauth]/route";
 import { baseURL } from "@/lib/axios";
 import { redirect } from "next/navigation";
 import PostList from "@/components/Post/PostList";
-import RecipeList from "@/components/Recipe/RecipeList";
+import RecipeList from "@/components/recipe/RecipeList";
 import divder from "@/components/Divder";
 import Link from "next/link";
 import {

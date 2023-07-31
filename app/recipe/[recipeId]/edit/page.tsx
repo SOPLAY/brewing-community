@@ -1,5 +1,5 @@
 import { baseURL } from "@/lib/axios";
-import RecipeEditor from "@/components/Recipe/RecipeEditor";
+import RecipeEditor from "@/components/recipe/RecipeEditor";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {

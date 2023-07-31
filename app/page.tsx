@@ -4,7 +4,7 @@ import { Metadata } from "next";
 import Bg1 from "@/public/assets/sign-bg.webp";
 import Image from "next/image";
 import Link from "next/link";
-import RecipeList from "@/components/Recipe/RecipeList";
+import RecipeList from "@/components/recipe/RecipeList";
 import { prisma } from "@/lib/prisma";
 import { NextResponse } from "next/server";
 import { cache } from "react";
