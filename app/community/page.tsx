@@ -1,9 +1,9 @@
-import PaginationButton from "@/app/community/PaginationButton";
+import PaginationButton from "@/components/Button/PaginationButton";
 import PostList from "@/components/Post/PostList";
 import { baseURL } from "@/lib/axios";
 import CommunityNav from "@/app/community/CommunityNav";
 
-export const revalidate = 20;
+export const revalidate = 10;
 
 const getPostData = async (category: string, page: number, pageSize: number) =>
   await fetch(

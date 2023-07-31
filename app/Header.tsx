@@ -15,7 +15,7 @@ const navList = [
 
 export default async function Header() {
   return (
-    <header className="flex h-[60px] items-center fixed w-full px-6 bg-base z-50">
+    <header className="flex h-[60px] items-center fixed w-full px-6 bg-base z-50 min-w-[450px]">
       <h1>
         <Logo />
       </h1>
