@@ -5,7 +5,7 @@ import { authOption } from "@/app/api/auth/[...nextauth]/route";
 import { HiOutlinePencilAlt } from "react-icons/hi";
 import DeleteBtn from "@/components/Button/DeleteBtn";
 import { BiSolidCoffeeBean, BiTimer } from "react-icons/bi";
-import { roastingPoint } from "@/components/recipe/RecipeCard";
+import { roastingPoint } from "@/components/Recipe/RecipeCard";
 import { MdCoffeeMaker } from "react-icons/md";
 import Divider from "@/components/Divder";
 import { Fragment } from "react";
