@@ -38,8 +38,6 @@ export default async function Page({
 }: Props) {
   const data = await getPostData(category, page, pageSize, email);
 
-  console.log(data);
-
   return (
     <>
       {!email ? <CommunityNav /> : <div className="mt-10" />}
