@@ -52,7 +52,6 @@ export default function RecipeCard(props: Props) {
     (acc: number, cur: { seconds: number }) => acc + cur.seconds,
     0
   );
-
   const [minutes, seconds] = [Math.floor(totalSeconds / 60), totalSeconds % 60];
 
   return (
