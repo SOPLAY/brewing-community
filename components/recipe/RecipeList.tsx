@@ -1,4 +1,4 @@
-import RecipeCard, { IRecipe } from "@/components/Recipe/RecipeCard";
+import RecipeCard, { IRecipe } from "./RecipeCard";
 
 type Props = {
   recipeList: IRecipe[];

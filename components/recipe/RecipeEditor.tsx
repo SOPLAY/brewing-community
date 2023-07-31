@@ -5,7 +5,7 @@ import { Fragment, useRef, useState } from "react";
 import { toast } from "react-toastify";
 import { BiSolidCoffeeBean } from "react-icons/bi";
 import { Button } from "@/components/Button/Button";
-import { roastingPoint as roastingPointData } from "@/components/Recipe/RecipeCard";
+import { roastingPoint as roastingPointData } from "./RecipeCard";
 import axios from "@/lib/axios";
 import Divider from "@/components/Divder";
 
