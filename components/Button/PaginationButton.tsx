@@ -9,6 +9,12 @@ type Props = {
   current: number;
 };
 export default function PaginationButton({ max, current }: Props) {
+  useEffect(() => {
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
+  }, []);
   const pathName = usePathname();
   const searchParams = useSearchParams()!;
 

@@ -5,7 +5,7 @@ import { Fragment, useRef, useState } from "react";
 import { toast } from "react-toastify";
 import { BiSolidCoffeeBean } from "react-icons/bi";
 import { Button } from "@/components/Button/Button";
-import { roastingPoint as roastingPointData } from "@/components/recipe/RecipeCard";
+import { roastingPoint as roastingPointData } from "./RecipeCard";
 import axios from "@/lib/axios";
 import Divider from "@/components/Divder";
 
@@ -95,9 +95,14 @@ export default function RecipeEditor({ initValue, submitUrl, type }: Props) {
       url: submitUrl,
       data: body,
     })
-      .then(() => {
+      .then((res) => {
+        const { id } = res.data;
         toast.success("레시피를 생성했습니다.");
-        router.push(`/recipe${type === "edit" ? `/${initValue?.id}` : ""}`);
+        router.replace("/");
+        router.refresh();
+        router.replace("/recipe");
+        router.refresh();
+        router.push(`/recipe/${id}`);
         router.refresh();
       })
       .catch(() =>

@@ -9,11 +9,21 @@ import { roastingPoint } from "@/components/recipe/RecipeCard";
 import { MdCoffeeMaker } from "react-icons/md";
 import Divider from "@/components/Divder";
 import { Fragment } from "react";
+import { redirect } from "next/navigation";
 
 const getData = async (id: string) =>
   await fetch(`${baseURL}/api/recipe/${id}`, {
     next: { revalidate: 10, tags: ["recipe"] },
   }).then(async (res) => await res.json());
+
+export const generateMetadata = async ({ params: { recipeId } }: Props) => {
+  const data = await getData(recipeId);
+
+  return {
+    title: `${data.title} - 브루잉 레시피`,
+    description: `${data.title} 레시피로 추출하는 브루잉을 즐겨보세요!`,
+  };
+};
 const MiniCard = ({ children }: { children: React.ReactNode }) => (
   <div className="flex flex-col justify-center items-center h-28 min-w-[118px] border rounded-xl bg-base [&>p]:font-bold [&>p]:overflow-hidden [&>p]:text-ellipsis">
     {children}
@@ -29,6 +39,9 @@ type Props = {
 export default async function Page({ params: { recipeId } }: Props) {
   const session = await getServerSession(authOption);
   const data = await getData(recipeId);
+  if (!data.content) {
+    redirect("/404");
+  }
   const isAuthor = data.authorEmail === session?.user?.email;
   const totalSeconds: number = JSON.parse(data.content).reduce(
     (acc: number, cur: { seconds: number }) => acc + cur.seconds,
@@ -46,7 +59,7 @@ export default async function Page({ params: { recipeId } }: Props) {
 
   return (
     <main className="p-[30px]">
-      <h3 className="text-gray-500 font-semibold text-xl flex justify-between">
+      <h2 className="text-gray-500 font-semibold text-xl flex justify-between">
         <Link href={`/recipe`}>
           <span>{"레시피"}</span>
         </Link>
@@ -62,7 +75,7 @@ export default async function Page({ params: { recipeId } }: Props) {
             <DeleteBtn postId={recipeId} type={"recipe"} />
           </div>
         )}
-      </h3>
+      </h2>
       <h2 className="text-[40px] font-bold w-full">{data.title}</h2>
       <div className="flex justify-center mt-10 gap-4">
         <MiniCard>

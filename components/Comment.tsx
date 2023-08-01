@@ -151,10 +151,11 @@ const CommentEditor = ({
   onClick,
 }: {
   initialState?: string;
-  onClick: (text: string) => void;
+  onClick: (text: string) => Promise<void>;
   label?: string;
 }) => {
   const [text, setText] = useState(initialState);
+  const [isLoading, setIsLoading] = useState(false);
   const session = useSession();
   return (
     <div className="flex gap-2 h-14 items-center relative rounded overflow-hidden">
@@ -170,12 +171,19 @@ const CommentEditor = ({
       />
       <button
         className="bg-green-600 w-32 h-14 rounded text-white font-bold hover:bg-green-500 duration-300"
-        onClick={() => {
-          onClick(text);
+        disabled={isLoading}
+        onClick={async () => {
+          setIsLoading(true);
+          await onClick(text);
+          setIsLoading(false);
           setText(initialState);
         }}
       >
-        작성하기
+        {isLoading ? (
+          <span className="loading loading-spinner loading-md" />
+        ) : (
+          "작성하기"
+        )}
       </button>
     </div>
   );

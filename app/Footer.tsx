@@ -28,6 +28,7 @@ export default function Footer() {
           <Link
             href={"https://github.com/soplay"}
             prefetch={false}
+            aria-label={"개발자 깃허브 링크"}
             target="_blank"
           >
             <FaGithub className="text-3xl" />

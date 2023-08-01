@@ -2,19 +2,21 @@ import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { getServerSession } from "next-auth";
 import { authOption } from "@/app/api/auth/[...nextauth]/route";
-import { revalidatePath } from "next/cache";
+import { revalidatePath, revalidateTag } from "next/cache";
 
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
   const category = searchParams.get("category") || "all";
   const page = parseInt(searchParams.get("page") || "0");
   const pageSize = parseInt(searchParams.get("pageSize") || "20");
+  const email = searchParams.get("email") || undefined;
 
   const pageLength = Math.ceil(
     (await prisma.post.count({
       where: {
         category: category === "all" ? undefined : category,
         published: true,
+        authorEmail: email,
       },
     })) / pageSize
   );
@@ -24,6 +26,7 @@ export async function GET(request: Request) {
     where: {
       category: category === "all" ? undefined : category,
       published: true,
+      authorEmail: email,
     },
     select: {
       id: true,
@@ -77,9 +80,8 @@ export async function POST(request: Request) {
     },
   });
 
+  revalidateTag("post");
   revalidatePath("/community");
-  revalidatePath("/community/search");
-
   return NextResponse.json(post, {
     status: 201,
   });

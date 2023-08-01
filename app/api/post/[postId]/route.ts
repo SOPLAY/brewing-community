@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 import { authOption } from "@/app/api/auth/[...nextauth]/route";
 import { prisma } from "@/lib/prisma";
-import { revalidatePath } from "next/cache";
+import { revalidatePath, revalidateTag } from "next/cache";
 
 type Params = { params: { postId: string } };
 export async function GET(request: Request, { params: { postId } }: Params) {
@@ -67,9 +67,7 @@ export async function PUT(request: Request, { params: { postId } }: Params) {
     );
   }
 
-  revalidatePath("/community");
-  revalidatePath("/community/search");
-  revalidatePath("/");
+  revalidateTag("post");
 
   return NextResponse.json(updatedPost, {
     status: 200,
@@ -104,9 +102,7 @@ export async function DELETE(request: Request, { params: { postId } }: Params) {
     );
   }
 
-  revalidatePath("/community");
-  revalidatePath("/community/search");
-  revalidatePath("/");
+  revalidateTag("post");
 
   return NextResponse.json(
     { post: deletedPost },
